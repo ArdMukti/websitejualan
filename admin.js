@@ -11,12 +11,11 @@ async function init(){
 }
 async function load(){
   try{
-    const [pRes,oRes,aRes]=await Promise.all([fetch('/api/products'),fetch('/api/orders'),fetch('/api/admin/order-archives')]);
+    const [pRes,oRes]=await Promise.all([fetch('/api/products'),fetch('/api/orders')]);
     products=await pRes.json();
     const orders=await oRes.json();
-    const archives=await aRes.json();
     if(!Array.isArray(orders))throw new Error(orders.error||'Gagal memuat pesanan.');
-    renderStats(orders);renderOrders(orders);renderArchives(Array.isArray(archives)?archives:[]);renderProducts();
+    renderStats(orders);renderOrders(orders);renderProducts();
   }catch(e){$('#orders').innerHTML=`<div class="panel empty">${esc(e.message||'Gagal memuat pesanan.')}</div>`}
 }
 function normalizeStatus(o){
@@ -52,14 +51,6 @@ async function changeStatus(id,status,select){
     if(!r.ok)throw new Error(d.error||'Gagal mengubah status.');
     load();
   }catch(e){alert(e.message||'Gagal mengubah status.');load();}
-}
-function renderArchives(as){
-  if(!as.length){$('#archiveList').innerHTML='<div class="panel empty">Belum ada riwayat arsip.</div>';return}
-  $('#archiveList').innerHTML=`<div class="panel" style="padding:0;overflow:hidden"><table class="admin-table"><thead><tr><th>Tanggal</th><th>No</th><th>Produk</th><th>Total</th><th>Status</th><th>Diarsipkan</th></tr></thead><tbody>${as.map(o=>{
-    const status=normalizeStatus(o);
-    const items=Array.isArray(o.items)?o.items:[];
-    return `<tr><td>${esc(o.business_date)}</td><td>#${o.order_id}</td><td>${items.map(i=>esc(i.name)+' × '+i.quantity).join('<br>')||'-'}</td><td>${money(o.total)}</td><td><span class="status-pill ${status==='proses'||status==='selesai'?'green':'yellow'}">${statusText[status]}</span></td><td>${o.archived_at?new Date(o.archived_at).toLocaleString('id-ID',{timeZone:'Asia/Makassar'}):'-'}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
 }
 function renderProducts(){$('#productList').innerHTML=products.map(p=>`<div class="adminrow"><div><b>${esc(p.name)}</b><br><small style="color:var(--muted)">${money(p.price)} · stok ${p.stock} · ${esc(p.category||'Tanpa kategori')}</small></div><button class="btn small" onclick="edit(${p.id})">Edit</button><button class="btn danger small" onclick="del(${p.id})">Hapus</button></div>`).join('')||'<div class="empty">Belum ada produk.</div>'}
 function openForm(p){$('#modal').classList.remove('hidden');$('#productForm').reset();for(const k of ['id','name','description','price','stock','category','image'])$(`#productForm [name="${k}"]`).value=p?.[k]??''}
