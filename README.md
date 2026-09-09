@@ -1,20 +1,19 @@
-DANE STORE — Vercel + Neon
+# Minuman Sutomo
 
-Urutan deploy:
-1. Upload isi folder ini ke root repository GitHub.
-2. Di Vercel: Add New Project > Import repository.
-3. Root Directory: ./
-4. Framework Preset: Other.
-5. Build Command: kosong.
-6. Output Directory: kosong.
-7. Deploy.
-8. Setelah project dibuat, Vercel > Storage > Add > Neon/Postgres integration.
-9. Hubungkan database ke Production.
-10. Tambahkan Environment Variables:
-   DATABASE_URL = otomatis dari Neon jika tersedia
-   ADMIN_USERNAME = admin
-   ADMIN_PASSWORD = password admin kamu
-   SESSION_SECRET = string acak panjang
-11. Redeploy setelah environment variables berubah.
+Vercel + Neon. Tema kuning tua/kayu.
 
-Jangan pernah memasukkan DATABASE_URL ke kode frontend atau GitHub.
+Fitur:
+- Produk dan stok
+- Login/register
+- Checkout tanpa alamat & nomor HP
+- Pembayaran Cash atau Transfer
+- Transfer: menunggu konfirmasi admin
+- Admin dapat konfirmasi/tolak pembayaran
+- Admin dapat menandai pesanan selesai
+- Status pesanan customer
+- Database Neon lama tetap digunakan; API melakukan migration otomatis pada tabel orders.
+
+- Admin dapat mengganti QR DANA dari `admin.html`.
+- QR DANA disimpan di Vercel Blob, URL-nya disimpan di tabel `payment_settings` pada Neon.
+- Customer selalu mengambil QR DANA terbaru saat checkout/pesanan.
+- Ukuran upload QR dibatasi 3 MB agar aman terhadap batas request server. Tambahkan `BLOB_READ_WRITE_TOKEN` pada Environment Variables Vercel. Token biasanya tersedia setelah Blob Storage dibuat/diaktifkan pada project.
