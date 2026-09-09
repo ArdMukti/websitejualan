@@ -1,18 +1,23 @@
 # Minuman Sutomo
 
-Vercel + Neon. Frontend diperbarui mengikuti desain referensi Minuman Sutomo dengan tema kuning/gold, kartu rounded, halaman auth, detail produk, keranjang, checkout, tracking pesanan, dan dashboard admin.
+Vercel + Neon. Frontend mengikuti desain referensi Minuman Sutomo dengan tema kuning/gold, kartu rounded, halaman auth, detail produk, keranjang, checkout, tracking pesanan, dan dashboard admin.
 
-## Perubahan
-- Redesign UI tanpa mengubah struktur atau isi database.
-- `api/index.js` tidak diubah; seluruh endpoint/database yang sudah ada tetap dipakai.
-- Tambah `produk.html` + `produk.js` untuk detail produk.
-- Tambah `checkout.html` + `checkout.js` untuk alur checkout terpisah.
-- Keranjang, status pesanan, login/register, dan admin disesuaikan dengan tampilan referensi.
-- Responsive untuk desktop dan mobile.
-- Data produk, stok, user, dan pesanan tetap berasal dari API/Neon yang sudah ada.
+## Perbaikan checkout & status pesanan
+- Memperbaiki alur `POST /api/orders` agar checkout tidak bergantung pada kolom tambahan `payment_status` / `payment_method`.
+- Tidak menjalankan `ALTER TABLE` atau migrasi kolom pada database yang sudah ada.
+- Metode pembayaran direpresentasikan dengan status awal:
+  - Cash → **Belum Dibayar**
+  - Transfer → **Transfer**
+- Admin dapat mengubah status pesanan melalui dropdown:
+  - **Belum Dibayar**
+  - **Transfer**
+  - **Proses**
+  - **Selesai**
+- Status pelanggan dan timeline pesanan mengikuti empat status tersebut.
+- Endpoint lama `confirm`, `finish`, dan `reject` tetap didukung untuk kompatibilitas.
 
 ## Environment Vercel
-Tetap gunakan environment variable yang sebelumnya:
+Gunakan environment variable:
 - `DATABASE_URL`
 - `SESSION_SECRET`
 - `ADMIN_USERNAME`
