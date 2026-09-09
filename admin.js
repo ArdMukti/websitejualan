@@ -1,14 +1,6 @@
 let products=[];const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
 const statusText={menunggu_konfirmasi:"Menunggu Konfirmasi",diproses:"Diproses",selesai:"Selesai",dibatalkan:"Dibatalkan",pending:"Menunggu Pembayaran"};
-async function init(){const m=await(await fetch("/api/me")).json();if(!m.user||m.user.role!=="admin")return location="/login.html";loadPaymentSettings();load()}
-async function loadPaymentSettings(){
- try{
-   const r=await fetch("/api/payment-settings"), d=await r.json();
-   $("#currentQr").innerHTML=d.dana_qr_url
-     ? `<img src="${esc(d.dana_qr_url)}" alt="QR DANA saat ini">`
-     : "<span>Belum ada QR DANA.</span>";
- }catch(e){ $("#currentQr").textContent="Gagal memuat QR DANA."; }
-}
+async function init(){const m=await(await fetch("/api/me")).json();if(!m.user||m.user.role!=="admin")return location="/login.html";load()}
 async function load(){
  products=await(await fetch("/api/products")).json();
  $("#stats").innerHTML=`<div class="stat">Produk<br><b>${products.length}</b></div><div class="stat">Stok<br><b>${products.reduce((a,p)=>a+p.stock,0)}</b></div><div class="stat">Nilai stok<br><b>${money(products.reduce((a,p)=>a+p.price*p.stock,0))}</b></div>`;
@@ -23,31 +15,3 @@ async function del(id){if(confirm("Hapus produk?")){const r=await fetch("/api/ad
 $("#productForm").onsubmit=async e=>{e.preventDefault();let b=Object.fromEntries(new FormData(e.target)),id=b.id;delete b.id;b.price=Number(b.price);b.stock=Number(b.stock);const r=await fetch("/api/admin/products"+(id?"/"+id:""),{method:id?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});if(!r.ok)return alert((await r.json()).error);closeForm();load()}
 $("#logout").onclick=async()=>{await fetch("/api/logout",{method:"POST"});location="/login.html"};
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}init();
-const qrFile=$("#qrFile"),qrPreview=$("#qrPreview"),qrForm=$("#qrForm");
-qrFile.onchange=()=>{
- const f=qrFile.files[0];
- if(!f){qrPreview.innerHTML="<span>Preview QR baru akan muncul di sini.</span>";return}
- if(!["image/png","image/jpeg","image/webp"].includes(f.type)){alert("Pilih PNG, JPG/JPEG, atau WebP.");qrFile.value="";return}
- if(f.size>4*1024*1024){alert("Ukuran foto QR maksimal 4 MB.");qrFile.value="";return}
- const reader=new FileReader();
- reader.onload=()=>qrPreview.innerHTML=`<img src="${reader.result}" alt="Preview QR DANA">`;
- reader.readAsDataURL(f);
-};
-qrForm.onsubmit=async e=>{
- e.preventDefault();
- const f=qrFile.files[0]; if(!f)return;
- const msg=$("#qrMsg"),btn=$("#saveQr");
- btn.disabled=true;msg.textContent="Mengupload QR...";
- try{
-   const dataUrl=await new Promise((resolve,reject)=>{
-     const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f);
-   });
-   const r=await fetch("/api/admin/payment-settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({danaQrData:dataUrl})});
-   const d=await r.json();
-   if(!r.ok)throw new Error(d.error||"Gagal menyimpan QR.");
-   msg.textContent="QR DANA berhasil disimpan.";
-   qrFile.value="";
-   await loadPaymentSettings();
- }catch(err){msg.textContent=err.message}
- finally{btn.disabled=false}
-};

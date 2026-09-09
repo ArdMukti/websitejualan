@@ -1,24 +1,6 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - Minuman Sutomo</title><link rel="stylesheet" href="/style.css"></head><body>
 <header><nav><a class="logo" href="/">🥤 Minuman Sutomo</a><button id="logout" class="ghost">Keluar</button></nav></header>
 <main class="narrow"><div class="head"><h1>Admin Dashboard</h1><button onclick="openForm()">+ Produk</button></div><div id="stats" class="stats"></div>
-<section class="card payment-settings">
-<h2>Pengaturan Pembayaran</h2>
-<p class="muted">QR DANA disimpan di Vercel Blob, sedangkan database Neon menyimpan URL-nya.</p>
-<div class="qr-setting-grid">
-  <div>
-    <b>Foto QR DANA saat ini</b>
-    <div id="currentQr" class="qr-preview"><span>Belum ada QR DANA.</span></div>
-  </div>
-  <form id="qrForm" class="qr-form">
-    <label>Ganti Foto QR
-      <input id="qrFile" type="file" accept="image/png,image/jpeg,image/webp" required>
-    </label>
-    <div id="qrPreview" class="qr-preview"><span>Preview QR baru akan muncul di sini.</span></div>
-    <button type="submit" id="saveQr">Simpan QR</button>
-    <p id="qrMsg"></p>
-  </form>
-</div>
-</section>
 <h2>Pesanan</h2><div id="orders"></div><h2>Produk</h2><div id="products"></div></main>
 <div id="modal" class="modal hidden"><form id="productForm" class="card form"><div class="head"><h2>Produk</h2><button type="button" class="ghost" onclick="closeForm()">×</button></div>
 <input type="hidden" name="id"><input name="name" placeholder="Nama minuman" required><textarea name="description" placeholder="Deskripsi"></textarea>

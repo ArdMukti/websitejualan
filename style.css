@@ -38,14 +38,3 @@ button.success{background:#3d7b45}
 .order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .status{font-weight:800}
 @media(max-width:600px){.hero{margin:18px;padding:40px 22px}.stats,.two,.payment{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.adminrow,.cartrow{grid-template-columns:1fr}}
-
-.muted{color:var(--muted)}
-.payment-settings{padding:20px;margin:20px 0 28px}
-.qr-setting-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-.qr-form{display:grid;gap:12px}
-.qr-preview{margin-top:10px;min-height:240px;border:1px dashed var(--line);border-radius:14px;background:#fffaf0;display:grid;place-items:center;padding:15px;text-align:center;color:var(--muted)}
-.qr-preview img{max-width:100%;max-height:320px;object-fit:contain;border-radius:8px}
-.dana-qr{padding:16px;text-align:center}
-.dana-qr-img{display:block;width:min(320px,100%);max-height:420px;object-fit:contain;margin:12px auto;border-radius:10px;background:#fff}
-.order-qr{margin-top:15px;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fffaf0;text-align:center}
-@media(max-width:600px){.qr-setting-grid{grid-template-columns:1fr}}
