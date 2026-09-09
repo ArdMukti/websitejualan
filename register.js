@@ -1,0 +1,1 @@
+$("#form").onsubmit=async e=>{e.preventDefault();const r=await fetch("/api/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))}),d=await r.json();if(r.ok){alert("Akun dibuat.");location="/login.html"}else $("#msg").textContent=d.error};

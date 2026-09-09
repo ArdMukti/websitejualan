@@ -1,0 +1,10 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><nav><a class="logo" href="/">DANE<span>STORE</span></a><button id="logout" class="ghost">Keluar</button></nav></header>
+<main class="narrow"><div class="head"><h1>Admin Dashboard</h1><button onclick="openForm()">+ Produk</button></div>
+<div id="stats" class="stats"></div><div id="products"></div><h2>Pesanan</h2><div id="orders"></div></main>
+<div id="modal" class="modal hidden"><form id="productForm" class="card form"><div class="head"><h2>Produk</h2><button type="button" class="ghost" onclick="closeForm()">×</button></div>
+<input type="hidden" name="id"><input name="name" placeholder="Nama produk" required><textarea name="description" placeholder="Deskripsi"></textarea>
+<div class="two"><input name="price" type="number" min="0" placeholder="Harga" required><input name="stock" type="number" min="0" placeholder="Stok" required></div>
+<input name="category" placeholder="Kategori"><input name="image" placeholder="URL gambar (opsional)"><button>Simpan</button></form></div>
+<script src="/admin.js"></script></body></html>
