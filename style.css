@@ -58,3 +58,28 @@ input,textarea,select{width:100%;background:#fffaf0;color:var(--text);border:1px
 
 /* QR DANA */
 .qr-box{margin-top:14px;padding:14px;border:1px dashed var(--line);border-radius:10px;background:#fffdf7;text-align:center}.qr-placeholder{padding:25px 10px;color:var(--muted);font-size:11px}.dana-qr{display:block;width:min(280px,100%);max-height:340px;object-fit:contain;margin:0 auto;border-radius:8px;background:#fff}.qr-note{margin:9px 0 0;color:var(--muted);font-size:10px}.hidden{display:none!important}.qr-admin-panel{padding:16px}.qr-admin-grid{display:grid;grid-template-columns:1fr 240px;gap:22px;align-items:start}.upload-label{display:block;font-size:12px;font-weight:800}.upload-label input{display:block;margin-top:8px;padding:10px}.qr-preview-wrap{min-height:230px;border:1px dashed var(--line);border-radius:10px;background:#fffdf7;display:grid;place-items:center;padding:12px}.qr-admin-preview{width:210px;height:210px;object-fit:contain;background:#fff;border-radius:8px}.qr-preview-empty{font-size:11px;color:var(--muted)}@media(max-width:620px){.qr-admin-grid{grid-template-columns:1fr}.qr-preview-wrap{min-height:190px}.qr-admin-preview{width:180px;height:180px}}
+
+/* ===== SMOOTH UI ENHANCEMENTS ===== */
+html{scroll-behavior:smooth}
+body{opacity:0;animation:sutomoPageIn .35s ease forwards}
+@keyframes sutomoPageIn{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body{animation:none;opacity:1}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+button,a,.card,.product-card,.order-card,.summary,.payment-option,input,select,textarea{transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,border-color .18s ease,opacity .18s ease}
+button:active{transform:scale(.97)}
+button:not(:disabled):hover{transform:translateY(-1px)}
+button:disabled{cursor:not-allowed;opacity:.6}
+a:hover{opacity:.86}
+img{transition:opacity .25s ease,transform .35s ease}
+img[loading="lazy"]{opacity:0}
+img.loaded{opacity:1}
+.sutomo-loading{position:fixed;inset:0;display:grid;place-items:center;background:rgba(255,248,229,.82);backdrop-filter:blur(4px);z-index:9999;opacity:1;visibility:visible;transition:opacity .25s ease,visibility .25s ease}
+.sutomo-loading.hide{opacity:0;visibility:hidden;pointer-events:none}
+.sutomo-spinner{width:34px;height:34px;border:3px solid rgba(92,62,28,.18);border-top-color:#8b5e22;border-radius:50%;animation:sutomoSpin .7s linear infinite}
+@keyframes sutomoSpin{to{transform:rotate(360deg)}}
+.sutomo-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#4f351d;color:#fff8e8;padding:11px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(45,28,10,.22);font-size:14px;z-index:10000;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;max-width:min(90vw,420px);text-align:center}
+.sutomo-toast.show{opacity:1;transform:translate(-50%,0)}
+.sutomo-skeleton{position:relative;overflow:hidden;background:#eadfca!important;color:transparent!important;border-radius:12px;min-height:90px}
+.sutomo-skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);animation:sutomoShimmer 1.15s infinite}
+@keyframes sutomoShimmer{to{transform:translateX(100%)}}
+.sutomo-fade-up{animation:sutomoFadeUp .4s ease both}
+@keyframes sutomoFadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
