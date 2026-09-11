@@ -8,7 +8,7 @@ async function init(){
   try{
     const me=await fetch('/api/me');
     const m=await me.json();
-    if(!m.user)return location='/login.html';
+    if(!m.user)return location='/register.html';
     const pr=await fetch('/api/products');
     products=await pr.json();
     if(!Array.isArray(products)) throw new Error(products.error||'Produk gagal dimuat.');
