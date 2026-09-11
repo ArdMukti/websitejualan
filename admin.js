@@ -83,11 +83,28 @@ function renderOrders(os){
   $('#orders').innerHTML=`<div class="panel" style="padding:0;overflow:hidden"><table class="admin-table"><thead><tr><th>No</th><th>Produk</th><th>Total</th><th>Pembayaran</th><th>Status</th><th>Perubahan</th></tr></thead><tbody>${os.map(o=>{
     const status=normalizeStatus(o);
     const payment=o.payment_method||(status==='transfer'?'transfer':'cash');
-    return `<tr><td>#${o.id}</td><td>${o.items?.map(i=>esc(i.name)+' × '+i.quantity).join('<br>')||'-'}</td><td>${money(o.total)}</td><td>${payment==='transfer'?'Transfer':'Cash'}</td><td><span class="status-pill ${status==='proses'||status==='selesai'?'green':'yellow'}">${statusText[status]}</span></td><td><select class="status-select" data-order-id="${o.id}"><option value="belum_dibayar" ${status==='belum_dibayar'?'selected':''}>Belum Dibayar</option><option value="transfer" ${status==='transfer'?'selected':''}>Transfer</option><option value="proses" ${status==='proses'?'selected':''}>Proses</option><option value="selesai" ${status==='selesai'?'selected':''}>Selesai</option></select></td></tr>`;
+    return `<tr><td>#${o.id}</td><td>${o.items?.map(i=>esc(i.name)+' × '+i.quantity).join('<br>')||'-'}</td><td>${money(o.total)}</td><td>${payment==='transfer'?'Transfer':'Cash'}</td><td><span class="status-pill ${status==='proses'||status==='selesai'?'green':'yellow'}">${statusText[status]}</span></td><td><div class="order-actions"><select class="status-select" data-order-id="${o.id}"><option value="belum_dibayar" ${status==='belum_dibayar'?'selected':''}>Belum Dibayar</option><option value="transfer" ${status==='transfer'?'selected':''}>Transfer</option><option value="proses" ${status==='proses'?'selected':''}>Proses</option><option value="selesai" ${status==='selesai'?'selected':''}>Selesai</option></select><button type="button" class="btn danger small delete-order" data-order-id="${o.id}">Hapus</button></div></td></tr>`;
   }).join('')}</tbody></table></div>`;
   document.querySelectorAll('.status-select').forEach(select=>{
     select.onchange=()=>changeStatus(Number(select.dataset.orderId),select.value,select);
   });
+  document.querySelectorAll('.delete-order').forEach(button=>{
+    button.onclick=()=>deleteOrder(Number(button.dataset.orderId),button);
+  });
+}
+async function deleteOrder(id,button){
+  if(!confirm(`Hapus pesanan #${id}? Pesanan yang dihapus tidak bisa dikembalikan.`))return;
+  button.disabled=true;
+  try{
+    const r=await fetch(`/api/admin/orders/${id}`,{method:'DELETE'});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Gagal menghapus pesanan.');
+    if(window.sutomoToast)window.sutomoToast(d.message||`Pesanan #${id} berhasil dihapus.`);
+    await load();
+  }catch(e){
+    button.disabled=false;
+    alert(e.message||'Gagal menghapus pesanan.');
+  }
 }
 async function changeStatus(id,status,select){
   const old=select.dataset.old||select.querySelector('option[selected]')?.value||'';

@@ -83,3 +83,8 @@ img.loaded{opacity:1}
 @keyframes sutomoShimmer{to{transform:translateX(100%)}}
 .sutomo-fade-up{animation:sutomoFadeUp .4s ease both}
 @keyframes sutomoFadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Pesanan: aksi status + hapus */
+.order-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.delete-order{white-space:nowrap}
+@media(max-width:700px){.admin-table{min-width:760px}.admin-table td,.admin-table th{padding:10px 8px}.order-actions{flex-direction:column;align-items:stretch}.order-actions .status-select,.order-actions .delete-order{width:100%}}
