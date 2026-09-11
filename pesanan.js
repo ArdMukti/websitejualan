@@ -9,7 +9,7 @@ function render(os){
    ['belum_dibayar','Belum Dibayar','Pesanan dibuat. Pembayaran belum diterima.'],
    ['transfer','Transfer','Pembayaran transfer menunggu proses admin.'],
    ['proses','Proses','Pesanan sedang disiapkan.'],
-   ['selesai','Selesai','Pesanan telah selesai.']
+   ['selesai','Selesai','Pesanan telah diantar.']
   ];
   const rank={belum_dibayar:0,transfer:1,proses:2,selesai:3}[status];
   return `<section class="panel" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;gap:15px;align-items:center"><div><b>Pesanan #${o.id}</b><div style="font-size:11px;color:var(--muted);margin-top:4px">Pembayaran: ${payText[payment]||payment}</div></div><span class="status-pill ${status==='proses'||status==='selesai'?'green':'yellow'}">${statusText[status]}</span></div><div class="timeline" style="margin-top:18px">${steps.map((s,i)=>`<div class="timeline-item ${i<=rank?'active':''}"><div class="timeline-dot"></div><div><h3>${s[1]}</h3><p>${s[2]}</p></div></div>`).join('')}</div><div style="border-top:1px solid var(--line);padding-top:13px;margin-top:4px">${o.items.map(i=>`<div class="summary-line"><span>${esc(i.name)} × ${i.quantity}</span><b>${money(i.price*i.quantity)}</b></div>`).join('')}<div class="summary-line total"><span>Total</span><b>${money(o.total)}</b></div></div>${status==='transfer'?'<p style="font-size:11px;color:var(--muted)"><b>Silakan selesaikan transfer sesuai instruksi admin.</b> Setelah itu status akan diperbarui admin.</p>':''}</section>`
