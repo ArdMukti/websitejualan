@@ -13,10 +13,31 @@ async function init(){
     products=await pr.json();
     if(!Array.isArray(products)) throw new Error(products.error||'Produk gagal dimuat.');
     render();
+    loadPaymentSettings();
   }catch(e){
     $('#msg').textContent=e.message||'Gagal memuat checkout.';
   }
 }
+async function loadPaymentSettings(){
+  const img=$('#danaQr'), loading=$('#qrLoading'), note=$('#qrMsg');
+  try{
+    const r=await fetch('/api/payment-settings');
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.error||'QR gagal dimuat.');
+    if(d.danaQrUrl){
+      img.src=d.danaQrUrl;
+      img.onload=()=>{img.classList.remove('hidden');loading.classList.add('hidden');note.textContent='Scan QR ini menggunakan aplikasi DANA.'};
+      img.onerror=()=>{img.classList.add('hidden');loading.classList.remove('hidden');loading.textContent='QR tidak dapat ditampilkan. Admin perlu mengganti gambar QR.'};
+    }else{
+      loading.textContent='QR DANA belum diatur oleh admin.';
+      note.textContent='Kamu tetap bisa memilih Cash.';
+    }
+  }catch(e){
+    loading.textContent='QR DANA belum tersedia.';
+    note.textContent='Silakan pilih Cash atau coba lagi nanti.';
+  }
+}
+
 function render(){
   let total=0;
   const html=cart.map(x=>{
@@ -50,3 +71,8 @@ $('#order').onclick=async()=>{
   }
 };
 init();
+
+
+document.querySelectorAll('input[name="payment"]').forEach(r=>r.addEventListener('change',()=>{
+  $('#qrBox').style.display=r.checked&&r.value==='transfer'?'block':'none';
+}));
